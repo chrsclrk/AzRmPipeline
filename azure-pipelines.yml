@@ -1,0 +1,28 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- script: echo Hello, world!
+  displayName: 'Run a one-line script'
+
+- script: |
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'AzureRmPipeline-conn'
+    subscriptionId: 'ee1e5803-956d-4de4-925f-0827d1df24a8'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'cclark_RG_ARM_VM'
+    location: 'Central US'
+    templateLocation: 'Linked artifact'
+    csmFile: 'CreateWebApp/azuredeploy.json'
+    overrideParameters: '-projectName cclark0507 -linkedTemplateUri https://raw.githubusercontent.com/chrsclrk/AzRmPipeline/main/CreateWebApp/linkedStorageAccount.json'
+    deploymentMode: 'Incremental'
